@@ -1,4 +1,3 @@
-// Dashboard.jsx
 import React, { useState, useEffect } from 'react';
 import {
   MenuFoldOutlined,
@@ -7,6 +6,8 @@ import {
   UserSwitchOutlined,
   HomeOutlined,
   LogoutOutlined,
+  TeamOutlined,
+  ShopOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme, Drawer } from 'antd';
 import { useNavigate, Outlet } from 'react-router-dom';
@@ -53,6 +54,24 @@ const Dashboard = () => {
       label: <span style={{ fontSize: collapsed ? '12px' : '16px' }}>المستخدمين</span>,
       onClick: () => {
         navigate('/dashboard/users');
+        setMobileMenuVisible(false);
+      },
+    },
+    {
+      key: 'user-groups',
+      icon: <TeamOutlined />,
+      label: <span style={{ fontSize: collapsed ? '12px' : '16px' }}>مجموعات المستخدمين</span>,
+      onClick: () => {
+        navigate('/dashboard/user-groups');
+        setMobileMenuVisible(false);
+      },
+    },
+    {
+      key: 'branches',
+      icon: <ShopOutlined />,
+      label: <span style={{ fontSize: collapsed ? '12px' : '16px' }}>الفروع</span>,
+      onClick: () => {
+        navigate('/dashboard/branches');
         setMobileMenuVisible(false);
       },
     },

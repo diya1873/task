@@ -1,6 +1,8 @@
 
+import Branches from './pages/Branches';
 import Dashboard from './pages/Dashboard';
 import Loginform from './pages/Loginform';
+import UserGroups from './pages/UserGroups';
 import Users from './pages/Users';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -38,6 +40,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Users />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="user-groups"
+            element={
+              <ProtectedRoute>
+                <UserGroups />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="branches"
+            element={
+              <ProtectedRoute>
+                <Branches />
               </ProtectedRoute>
             }
           />

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Table, Input, Button, Space, Tag } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Table, Input, Button, Space, Tag, message } from 'antd';
 import {
   UserOutlined,
   EditOutlined,
@@ -7,25 +7,48 @@ import {
   PlusOutlined,
 } from '@ant-design/icons';
 import AddUserModal from '../components/AddUserModal';
-
-const dummyUsers = Array.from({ length: 10 }, (_, index) => ({
-  key: index + 1,
-  userNo: `U00${index + 1}`,
-  username: `مستخدم ${index + 1}`,
-  branch: `فرع ${index % 3 + 1}`,
-  group: `مجموعة ${index % 2 === 0 ? 'مديرين' : 'موظفين'}`,
-  active: index % 2 === 0,
-}));
+import axios from 'axios';
 
 function Users() {
-  const [data, setData] = useState(dummyUsers);
+  const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+const token = localStorage.getItem('token');
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(
+        'https://retailapi.futec-soft.com/Users/v1.0/GetAll',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const transformed = response.data.Response.map((user, index) => ({
+        key: index + 1,
+        userNo: user.UserNo,
+        username: user.UserName,
+        branch: user.BranchDesc,
+        group: user.GroupArName,
+        active: user.IsActive,
+      }));
+
+      setData(transformed);
+    } catch (error) {
+      message.error('فشل في تحميل المستخدمين');
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const handleSearch = (value) => {
-    const filtered = dummyUsers.filter(
+    const filtered = data.filter(
       (user) =>
-        user.username.includes(value) || user.userNo.includes(value)
+        user.username.includes(value) ||
+        user.userNo.toString().includes(value)
     );
     setData(filtered);
   };
@@ -131,7 +154,6 @@ function Users() {
         />
       </div>
 
-    
       <AddUserModal
         visible={isModalOpen}
         onClose={() => setIsModalOpen(false)}
